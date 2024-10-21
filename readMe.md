@@ -20,7 +20,6 @@ The application includes a Python script for importing data from a JSON file int
 
 ### Python Script for Data Import
 ```python
-###
 import json
 import mysql.connector
 
@@ -89,27 +88,3 @@ print(f"{cursor.rowcount} rows inserted successfully.")
 # Close the cursor and the database connection
 cursor.close()
 db.close()
-###
-
-## Getting Started
-1. **Clone the Repository**:
-  ```bash
-   git clone https://github.com/Mohib997/real-time-data-visualization.git
-
-1. Navigate to the Project Directory:
-  ```bash
-    cd real-time-data-visualization
-
-2. Install Dependencies:
-  ```bash
-    npm install
-
-3. Run the Backend Server:
-  ```bash
-    node index.js
-
-4. Run the Frontend Application:
-  ```bash
-    cd frontend
-    npm start
-
