@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Plot from 'react-plotly.js';
-import h337 from 'heatmap.js'; // Import heatmap.js
+import h337 from 'heatmap.js'; 
 
 const App = () => {
   const [data, setData] = useState([]); 
@@ -9,11 +9,10 @@ const App = () => {
   const [duration, setDuration] = useState('last_hour'); 
   const [heatmapData, setHeatmapData] = useState([]);
 
-  // Fetch data from the backend
   useEffect(() => {
     const fetchData = async () => {
-      const startTime = 1662896470000; // Adjusted to a known valid timestamp in milliseconds
-      const endTime = 1662896500000; // Adjusted to a known valid timestamp in milliseconds
+      const startTime = 1662896470000; 
+      const endTime = 1662896500000; 
 
       console.log('Fetching data with params:', {
         option,
@@ -30,30 +29,29 @@ const App = () => {
           },
         });
 
-        console.log('Response from API:', response.data); // Log the full response
-        setData(response.data); // Set data in state
-        console.log('Data set in state:', response.data); // Log data state
+        console.log('Response from API:', response.data); 
+        setData(response.data); 
+        console.log('Data set in state:', response.data); 
 
-        // Prepare heatmap data from API
         const heatmapPoints = response.data.map(item => {
-          console.log('Item for heatmap:', item); // Log each item being processed
-          const posX = parseFloat(item.average_pos_x); // Ensure these match your SQL aliases
+          console.log('Item for heatmap:', item); 
+          const posX = parseFloat(item.average_pos_x); 
           const posY = parseFloat(item.average_pos_y);
           
           if (isNaN(posX) || isNaN(posY)) {
             console.warn(`Invalid values for heatmap: average_pos_x=${item.average_pos_x}, average_pos_y=${item.average_pos_y}`);
-            return null; // Skip this item if values are invalid
+            return null; 
           }
 
           return {
-            x: posX.toFixed(2), // Ensure it's a number after formatting
+            x: posX.toFixed(2), 
             y: posY.toFixed(2),
-            value: 1, // You can adjust this value as needed
+            value: 1, 
           };
-        }).filter(point => point !== null); // Filter out any invalid entries
+        }).filter(point => point !== null); 
 
-        console.log('Heatmap Data from API:', heatmapPoints); // Log heatmap data
-        setHeatmapData(heatmapPoints); // Set heatmap data in state
+        console.log('Heatmap Data from API:', heatmapPoints); 
+        setHeatmapData(heatmapPoints); 
 
       } catch (error) {
         console.error('Error fetching data:', error); 
@@ -63,34 +61,31 @@ const App = () => {
     fetchData();
   }, [option, duration]);
 
-  // Handle option selection
   const handleOptionChange = (e) => {
     setOption(e.target.value); 
   };
 
-  // Handle duration selection
   const handleDurationChange = (e) => {
     setDuration(e.target.value); 
   };
 
-  // Heatmap Initialization
   useEffect(() => {
     if (heatmapData.length > 0) {
-      console.log('Heatmap Data Before Initialization:', heatmapData); // Log heatmap data
+      console.log('Heatmap Data Before Initialization:', heatmapData); 
       const heatmapInstance = h337.create({
-        container: document.getElementById('heatmap'), // Specify the container for the heatmap
+        container: document.getElementById('heatmap'), 
       });
 
       heatmapInstance.setData({
-        max: Math.max(...heatmapData.map(d => parseFloat(d.value))), // Calculate the maximum value for normalization
-        data: heatmapData, // Pass the heatmap data
+        max: Math.max(...heatmapData.map(d => parseFloat(d.value))), 
+        data: heatmapData, 
       });
 
       console.log('Heatmap initialized with data:', heatmapData);
     } else {
       console.log('No heatmap data available for initialization.');
     }
-  }, [heatmapData]); // This effect runs when heatmapData changes
+  }, [heatmapData]); 
 
   return (
     <div>
@@ -117,8 +112,8 @@ const App = () => {
       {data.length > 0 ? (
         <Plot
           data={[{
-            x: data.map((d) => new Date(d.timestamp)),  // X-axis: Timestamps
-            y: data.map((d) => parseFloat(d.average_pos_x)),  // Y-axis: Average values from the backend
+            x: data.map((d) => new Date(d.timestamp)),  
+            y: data.map((d) => parseFloat(d.average_pos_x)),  
             type: 'scatter',
             mode: 'lines+markers',
           }]}
